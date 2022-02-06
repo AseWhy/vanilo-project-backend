@@ -1,0 +1,94 @@
+CREATE TABLE authors (
+    id BIGSERIAL NOT NULL PRIMARY KEY,
+    name VARCHAR(255)
+);
+
+CREATE TABLE carts (
+    id BIGSERIAL NOT NULL PRIMARY KEY,
+    user_id BIGINT NOT NULL
+);
+
+CREATE TABLE cart_items (
+    id BIGSERIAL NOT NULL PRIMARY KEY,
+    user_id BIGINT NOT NULL,
+    cart_id BIGINT NOT NULL,
+    collection_id BIGINT NOT NULL,
+    quantity BIGINT NOT NULL
+);
+
+CREATE TABLE collections (
+    id BIGSERIAL NOT NULL PRIMARY KEY,
+    lang VARCHAR(255),
+    availability BOOLEAN,
+    name VARCHAR(255),
+    description VARCHAR,
+    cost DOUBLE PRECISION NOT NULL,
+    eanupc VARCHAR(255) NOT NULL,
+    poster VARCHAR(255) NOT NULL,
+    publish_date date,
+    label VARCHAR(255) NOT NULL,
+    condition VARCHAR(255) NOT NULL,
+    author_id BIGINT NOT NULL
+);
+
+CREATE TABLE disks (
+    id BIGSERIAL NOT NULL PRIMARY KEY,
+    author_id BIGINT,
+    collection_id BIGINT
+);
+
+CREATE TABLE songs (
+    id BIGSERIAL NOT NULL PRIMARY KEY,
+    author_id BIGINT NOT NULL,
+    collection_id BIGINT NOT NULL,
+    disk_id BIGINT NOT NULL,
+    name VARCHAR(255),
+    "order" BIGINT
+);
+
+CREATE TABLE users (
+    id BIGSERIAL NOT NULL PRIMARY KEY,
+    login VARCHAR(255),
+    password VARCHAR(255),
+    first_name VARCHAR(255),
+    last_name VARCHAR(255),
+    date_of_birth date NOT NULL,
+    phone VARCHAR(255),
+    email VARCHAR(255)
+);
+
+CREATE TABLE attachments (
+    id BIGSERIAL NOT NULL PRIMARY KEY,
+    collection_id BIGINT,
+    path VARCHAR(255)
+);
+
+CREATE TABLE orders (
+    id BIGSERIAL NOT NULL PRIMARY KEY,
+    user_id BIGINT NOT NULL
+);
+
+CREATE TABLE order_items (
+    id BIGSERIAL NOT NULL PRIMARY KEY,
+    user_id BIGINT,
+    order_id BIGINT,
+    collection_id BIGINT,
+    quantity BIGINT,
+    cost DOUBLE PRECISION
+);
+
+ALTER TABLE order_items ADD CONSTRAINT FK_ORDER_ITEMS_ON_COLLECTION FOREIGN KEY (collection_id) REFERENCES collections (id);
+ALTER TABLE order_items ADD CONSTRAINT FK_ORDER_ITEMS_ON_ORDER FOREIGN KEY (order_id) REFERENCES orders (id);
+ALTER TABLE order_items ADD CONSTRAINT FK_ORDER_ITEMS_ON_USER FOREIGN KEY (user_id) REFERENCES users (id);
+ALTER TABLE orders ADD CONSTRAINT FK_ORDERS_ON_USER FOREIGN KEY (user_id) REFERENCES users (id);
+ALTER TABLE attachments ADD CONSTRAINT FK_ATTACHMENTS_ON_COLLECTION FOREIGN KEY (collection_id) REFERENCES collections (id);
+ALTER TABLE songs ADD CONSTRAINT FK_SONGS_ON_AUTHOR FOREIGN KEY (author_id) REFERENCES authors (id);
+ALTER TABLE songs ADD CONSTRAINT FK_SONGS_ON_COLLECTION FOREIGN KEY (collection_id) REFERENCES collections (id);
+ALTER TABLE songs ADD CONSTRAINT FK_SONGS_ON_DISK FOREIGN KEY (disk_id) REFERENCES disks (id);
+ALTER TABLE disks ADD CONSTRAINT FK_DISKS_ON_AUTHOR FOREIGN KEY (author_id) REFERENCES authors (id);
+ALTER TABLE disks ADD CONSTRAINT FK_DISKS_ON_COLLECTION FOREIGN KEY (collection_id) REFERENCES collections (id);
+ALTER TABLE collections ADD CONSTRAINT FK_COLLECTIONS_ON_AUTHOR FOREIGN KEY (author_id) REFERENCES authors (id);
+ALTER TABLE cart_items ADD CONSTRAINT FK_CART_ITEMS_ON_CART FOREIGN KEY (cart_id) REFERENCES carts (id);
+ALTER TABLE cart_items ADD CONSTRAINT FK_CART_ITEMS_ON_COLLECTION FOREIGN KEY (collection_id) REFERENCES collections (id);
+ALTER TABLE cart_items ADD CONSTRAINT FK_CART_ITEMS_ON_USER FOREIGN KEY (user_id) REFERENCES users (id);
+ALTER TABLE carts ADD CONSTRAINT FK_CARTS_ON_USER FOREIGN KEY (user_id) REFERENCES users (id);
