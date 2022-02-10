@@ -25,6 +25,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addViewControllers(@NotNull ViewControllerRegistry registry) {
         registry.addViewController("/").setViewName("index.html");
-        registry.addViewController("/{path:^(?!static|api|storage)(?:.*)}/**").setViewName("index.html");
+        registry.addViewController("/{path:^(?!static|api|storage|favicon.svg)(?:.*)}/**").setViewName("index.html");
     }
 }

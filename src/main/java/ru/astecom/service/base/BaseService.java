@@ -142,10 +142,14 @@ public class BaseService<E extends iIdentifiable<ID>, ID, R extends JpaRepositor
      * @return найденная страница
      */
     public RestPage<E> restList(@NotNull NoodleRestFilter filter) {
-        var invoker = Helper.getPresentInvoker();
+        var invoker = Helper.getInvokerNullable();
 
         if(this.interfaces.contains(iUserContains.class)) {
-            filter.and(condition -> condition.where("userId", invoker.getId()));
+            if(invoker != null) {
+                filter.and(condition -> condition.where("userId", invoker.getId()));
+            } else {
+                filter.and(condition -> condition.where("userId", "is null", null));
+            }
         }
 
         return list(filter);

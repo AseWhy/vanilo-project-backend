@@ -1,5 +1,6 @@
 package ru.astecom.DTO.user;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.github.asewhy.conversions.ConversionResponse;
 import io.github.asewhy.conversions.support.annotations.ResponseDTO;
 import lombok.Getter;
@@ -18,7 +19,9 @@ public class UserResponseDTO extends ConversionResponse<User> {
     private String login;
     private String firstName;
     private String lastName;
-    private LocalDate dateOfBirth;
     private String phone;
     private String email;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
+    private LocalDate dateOfBirth;
 }

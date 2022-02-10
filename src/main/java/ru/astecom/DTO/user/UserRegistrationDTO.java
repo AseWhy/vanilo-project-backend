@@ -1,5 +1,6 @@
 package ru.astecom.DTO.user;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.github.asewhy.conversions.ConversionMutator;
 import io.github.asewhy.conversions.support.annotations.MutatorDTO;
 import io.github.asewhy.conversions.support.annotations.MutatorExcludes;
@@ -27,5 +28,6 @@ public class UserRegistrationDTO extends ConversionMutator<User> {
     private String firstName;
     private String lastName;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
     private LocalDate dateOfBirth;
 }
